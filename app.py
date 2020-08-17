@@ -34,15 +34,14 @@ def home():
         f"/api/v1.0/<start><br/>" 
         f"/api/v1.0/<start>/<end><br/>"      
     ) 
-
 #PRECIPITATION
 @app.route("/api/v1.0/precipitation")
 def precipitation():
     print("Server received request for 'Precipitation' page...")
-    output =    session.query(Measurement.date, func.avg(Measurement.prcp)).\
+    precip_output =    session.query(Measurement.date, func.avg(Measurement.prcp)).\
                 group_by(Measurement.date).all()
 
-    dict_precip = dict(output)
+    dict_precip = dict(precip_output)
 
     return(
         jsonify(dict_precip)
@@ -52,10 +51,9 @@ def precipitation():
 @app.route("/api/v1.0/stations")
 def stations():
     print("Server received request for 'Stations' page...")
-    station_select = [Station.station,Station.name]
-    select = session.query(*station_select).all()
+    station_output = [Station.station,Station.name].all()
 
-    station_list = list(select)
+    station_list = list(station_output)
 
     return(
         jsonify(station_list)
